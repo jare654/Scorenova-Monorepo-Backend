@@ -61,13 +61,18 @@ export class TelegramAuthService {
     const user = JSON.parse(userStr!);
     
     // Create new account
+    
+    // Validate streamId is a uuid, otherwise set to null
+    const isValidUuid = streamId && streamId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+
     const account = this.accountRepository.create({
       name,
       telegramId: user.id,
       telegramUsername: user.username,
       telegramPhotoUrl: user.photo_url,
-      streamId,
+      streamId: isValidUuid ? streamId : null,
       gender,
+      phoneNumber: '+TG' + user.id, // Dummy phone number for Telegram users
       type: 'student',
       isActive: true,
       isPremium: false,
