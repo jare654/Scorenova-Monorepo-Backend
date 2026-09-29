@@ -13,4 +13,12 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: scorenova-db
+          property: connectionString
+
+databases:
+  - name: scorenova-db
+    plan: free
+    databaseName: scorenova
+    user: scorenova_user
