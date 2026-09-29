@@ -22,4 +22,8 @@ export class CompleteProfileDto {
   @IsString()
   @IsOptional()
   gender?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
 }

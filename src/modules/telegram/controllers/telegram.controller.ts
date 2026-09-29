@@ -22,6 +22,7 @@ export class TelegramController {
       dto.initData,
       dto.name,
       dto.streamId,
+      dto.phoneNumber,
       dto.gender
     );
   }

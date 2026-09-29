@@ -47,7 +47,7 @@ export class TelegramAuthService {
     return this.generateTokens(account);
   }
 
-  async completeProfile(initData: string, name: string, streamId: string, gender?: string) {
+  async completeProfile(initData: string, name: string, streamId: string, phoneNumber: string, gender?: string) {
     const botToken = this.configService.get<string>('TELEGRAM_BOT_TOKEN');
     
     try {
@@ -72,7 +72,8 @@ export class TelegramAuthService {
       telegramPhotoUrl: user.photo_url,
       streamId: isValidUuid ? streamId : null,
       gender,
-      phoneNumber: '+TG' + user.id, // Dummy phone number for Telegram users
+      phoneNumber,
+      username: user.username, // Dummy phone number for Telegram users
       type: 'student',
       isActive: true,
       isPremium: false,
