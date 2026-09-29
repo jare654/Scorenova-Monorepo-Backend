@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Account } from '../../account/models/accounts/account.entity';
+import { AccountEntity as Account } from '../../account/models/accounts/account.entity';
 import { validate } from '@tma.js/init-data-node';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';

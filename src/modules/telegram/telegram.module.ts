@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegramController } from './controllers/telegram.controller';
 import { TelegramAuthService } from './services/telegram-auth.service';
-import { Account } from '../account/models/accounts/account.entity';
+import { AccountEntity as Account } from '../account/models/accounts/account.entity';
 
 @Module({
   imports: [
