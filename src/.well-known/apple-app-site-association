@@ -1,0 +1,28 @@
+{
+    "applinks": {
+      "apps": [],
+      "details": [
+        {
+          "appIDs": [
+            "GRSCRVKHPB.com.elevatingfreely.cooklikeme"
+          ],
+          
+          "paths": [
+           "/*"
+          ],
+          "components": [
+            {
+              "/": "/*"
+            }
+          ]
+        }
+        
+      ],
+      "webcredentials": {
+    "apps": [
+       "GRSCRVKHPB.com.elevatingfreely.cooklikeme"
+    ]
+    }
+    }
+  }
+  

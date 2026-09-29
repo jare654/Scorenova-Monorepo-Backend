@@ -1,0 +1,78 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # Job 1: Deploy to Production
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT || 22 }}
+          script: |
+            # Stop the pipeline if any command fails
+            set -e
+
+            # Configuration
+            DEPLOY_ROOT="/home/eyobalex/ProductionBuilds/Backend/nest-starter"
+            REPO_URL="https://github.com/${{ github.repository }}.git"
+            BRANCH="main"
+
+            # Create new version directory
+            VERSION="v$(date +%Y%m%d%H%M%S)"
+            NEW_DIR="$DEPLOY_ROOT/$VERSION"
+            mkdir -p "$NEW_DIR"
+
+            echo "🚀 Deploying version $VERSION to $NEW_DIR..."
+
+            # Clone repository
+            git clone --branch $BRANCH $REPO_URL "$NEW_DIR"
+
+            cd "$NEW_DIR"
+
+            # Copy environment variables
+            if [ -f "$DEPLOY_ROOT/.env" ]; then
+              cp "$DEPLOY_ROOT/.env" ./
+            else
+              echo "⚠️ .env file not found in $DEPLOY_ROOT"
+              exit 1
+            fi
+
+            # Install dependencies
+            echo "📦 Installing dependencies..."
+            npm install --legacy-peer-deps
+
+            # Run Migrations
+            echo "🗄️ Handling migrations..."
+            npm run migration:generate -- db/migrations/migration_$(date +%Y%m%d%H%M%S) || echo "⚠️ Migration generation failed or no changes detected, continuing..."
+            npm run migration:run || echo "⚠️ Migration run failed."
+
+            # Build Application
+            echo "🏗️ Building application..."
+            npm run build
+
+            # Cleanup
+            rm -rf src .git
+
+            # Update Symlink (Atomic switch)
+            echo "🔗 Switching to new version..."
+            ln -sfn "$NEW_DIR" "$DEPLOY_ROOT/current"
+
+            # Restart PM2
+            cd "$DEPLOY_ROOT/current"
+            echo "🔄 Restarting PM2..."
+            pm2 stop NestStarterApi || true
+            pm2 delete NestStarterApi || true
+            pm2 start ecosystem.config.js
+            pm2 save
+
+            echo "✅ Deployment completed successfully!"
