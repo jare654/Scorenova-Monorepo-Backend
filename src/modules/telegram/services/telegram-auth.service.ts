@@ -87,7 +87,7 @@ export class TelegramAuthService {
   }
 
   private generateTokens(account: Account) {
-    const payload = { sub: account.id, type: account.type };
+    const payload = { id: account.id, type: account.type };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '30d' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '36500d' });
 

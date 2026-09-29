@@ -12,7 +12,7 @@ import { AccountEntity as Account } from '../account/models/accounts/account.ent
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'secret',
+        secret: configService.get<string>('JWT_SECRET') || process.env.JWT_SECRET || 'secret',
       }),
       inject: [ConfigService],
     }),
