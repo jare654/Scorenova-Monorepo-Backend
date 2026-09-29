@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -66,6 +67,7 @@ export class TelegramAuthService {
     const isValidUuid = streamId && streamId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
 
     const account = this.accountRepository.create({
+      id: uuidv4(),
       name,
       telegramId: user.id,
       telegramUsername: user.username,

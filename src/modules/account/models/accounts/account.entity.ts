@@ -36,6 +36,7 @@ export class AccountEntity extends CommonEntity {
   @Column({ name: "status", type: "varchar", length: 32, default: "pending_otp" })
   status: AccountRegistrationStatus;
   @Column({ nullable: true, name: "fcm_id" })
+  fcmId: string;
 
   @Column({ name: "telegram_id", type: "bigint", nullable: true, unique: true })
   telegramId?: number;
@@ -45,7 +46,6 @@ export class AccountEntity extends CommonEntity {
 
   @Column({ name: "telegram_photo_url", type: "varchar", nullable: true })
   telegramPhotoUrl?: string;
-  fcmId: string;
   @Column({ name: "address", type: "jsonb", nullable: true })
   address: Address;
   @Index()
